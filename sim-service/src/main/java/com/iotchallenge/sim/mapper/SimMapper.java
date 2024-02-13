@@ -11,4 +11,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface SimMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(SimDto dto, @MappingTarget Sim entity);
+
+
+    SimDto toDto(Sim entity);
 }

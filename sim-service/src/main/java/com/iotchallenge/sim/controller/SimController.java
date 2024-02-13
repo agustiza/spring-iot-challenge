@@ -25,30 +25,34 @@ public class SimController {
     @Autowired
     private SimMapper mapper;
 
+    @GetMapping("")
+    public Page<SimDto> findAllSims(Pageable pageable) {
+        return repository.findAll(pageable).map(mapper::toDto);
+    }
+
+    @PostMapping("")
+    public SimDto create(@RequestBody SimDto dto) {
+
+        Sim sim = new Sim(dto.simId(), dto.country(), dto.active());
+        repository.save(sim);
+        return new SimDto(sim.isActive(), sim.getCountry(), sim.getSimId());
+    }
 
     @GetMapping(value = "/{simId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public SimDto get(@PathVariable("simId") String simId) {
 
         Sim sim = repository.findSimBySimId(simId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Sim not found"));
-
         return new SimDto(sim.isActive(), sim.getCountry(), sim.getSimId());
-    }
-
-    @GetMapping("/")
-    public Page<Sim> findAllSims(Pageable pageable) {
-        return repository.findAll(pageable);
     }
 
     @PatchMapping("/{simId}")
     public SimDto update(@PathVariable("simId") String simId, @RequestBody SimDto dto) {
+
         Sim sim = repository.findSimBySimId(simId)
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Sim not found"));
-
         mapper.update(dto, sim);
-
         return new SimDto(sim.isActive(), sim.getCountry(), sim.getSimId());
     }
-
 
 }
