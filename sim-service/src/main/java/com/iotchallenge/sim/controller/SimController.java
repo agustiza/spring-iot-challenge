@@ -11,8 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
-
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
