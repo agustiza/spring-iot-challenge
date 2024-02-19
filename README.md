@@ -20,9 +20,14 @@ Main features:
 `docker compose up --build -d`
 
 
-#### Optionally:  start a sensor device simulator with
+#### Start a sensor device simulator with
 
 ```docker run --rm -it --net spring-iot-challenge_default $(docker build -q mocksensor) --devices=10```
 
-This will repeatedly push data to the data ingestion service. 
+This will repeatedly push data to the data ingestion service.
 By default each device will output data once every 5 seconds.
+
+#### Monitor with Grafana + InfluxDb :chart_with_upwards_trend:
+
+Open `localhost:3000` on your browser and login to grafana with the default admin:admin.
+

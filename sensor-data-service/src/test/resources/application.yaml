@@ -1,0 +1,2 @@
+influx:
+  url: "http://localhost:8086"

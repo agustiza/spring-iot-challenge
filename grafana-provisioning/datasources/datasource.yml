@@ -1,0 +1,35 @@
+apiVersion: 1
+datasources:
+  - name: InfluxDB_v2_Flux
+    type: influxdb
+    uid: "P5697886F9CA74929"
+    access: proxy
+    url: http://influxdb:8086
+    jsonData:
+      version: Flux
+      organization: org
+      defaultBucket: bucket
+      tlsSkipVerify: true
+    secureJsonData:
+      token: token
+#  - name: InfluxDB
+#    type: influxdb
+#    access: proxy
+#    database: ""
+#    user: admin
+#    password: token
+#    url: http://influxdb:8086
+#    isDefault: true
+#    editable: true
+#    jsonData:
+#      "dbName": "bucket",
+#      "oauthPassThru": false,
+#      "tlsAuth": false,
+#      tlsSkipVerify: true
+#      "version": "InfluxQL"
+#      organization: org
+#      defaultBucket: bucket
+#      httpMode: POST
+#    secureJsonData:
+#      httpHeaderValue1: 'Token token'
+#      token: 'token'

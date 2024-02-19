@@ -19,3 +19,23 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+influx:
+  url: http://influxdb:8086/
+  username: admin
+  password: admin1234
+  bucket: "bucket"
+  org: "org"
+  token: "token"
+
+management:
+  influx:
+    metrics:
+      export:
+        db: db0
+        bucket: "bucket"
+        org: "org"
+        user-name: "${influx.username}"
+        password: "${influx.password}"
+        uri: "${influx.url}"
+        token: "${influx.token}"

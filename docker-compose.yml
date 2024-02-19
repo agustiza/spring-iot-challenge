@@ -11,6 +11,7 @@ services:
       - "8091-8100:8080"
     depends_on:
       - kafka
+      - influxdb
     deploy:
       mode: replicated
       replicas: 2
@@ -27,7 +28,7 @@ services:
       spring.datasource.username: admin
       spring.datasource.password: admin
     ports:
-      - "8081-8090:8080"
+      - "8070-8079:8080"
     depends_on:
       - postgres
       - redis
@@ -58,6 +59,49 @@ services:
     ports:
       - 8080:8080
 
+  influxdb:
+    image: influxdb:latest
+    ports:
+      - '8086:8086'
+    volumes:
+      - influxdb-storage:/var/lib/influxdb
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin1234
+      - DOCKER_INFLUXDB_INIT_ORG=org
+      - DOCKER_INFLUXDB_INIT_BUCKET=bucket
+      - DOCKER_INFLUXDB_INIT_RETENTION=1w
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=token
+      - INFLUXDB_DB=db0
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin1234
+  chronograf:
+    image: chronograf:latest
+    ports:
+      - '127.0.0.1:8888:8888'
+    volumes:
+      - chronograf-storage:/var/lib/chronograf
+    depends_on:
+      - influxdb
+    environment:
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_USERNAME=admin
+      - INFLUXDB_PASSWORD=admin1234
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-storage:/var/lib/grafana
+      - ./grafana-provisioning/:/etc/grafana/provisioning
+    depends_on:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH__FILE=/etc/grafana/provisioning/dashboards/home
+
   zookeeper:
     image: wurstmeister/zookeeper
     ports:
@@ -80,3 +124,8 @@ services:
       - zookeeper
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  influxdb-storage:
+  chronograf-storage:
+  grafana-storage:
